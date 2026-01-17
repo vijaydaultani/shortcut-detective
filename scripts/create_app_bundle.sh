@@ -52,39 +52,31 @@ APP_PATH="$(cd "$(dirname "$0")/../Resources" && pwd)"
 DETECTOR="$APP_PATH/shortcut-detective"
 
 # Create a shell script that Terminal will run
-TEMP_SCRIPT=$(mktemp /tmp/shortcut-detective-XXXXXX.sh)
+TEMP_SCRIPT="/tmp/shortcut-detective-$$.sh"
+
+# Write the script content
+echo '#!/bin/bash' > "$TEMP_SCRIPT"
+echo 'clear' >> "$TEMP_SCRIPT"
+echo 'echo "=============================================="' >> "$TEMP_SCRIPT"
+echo 'echo "🔍 Shortcut Detective"' >> "$TEMP_SCRIPT"
+echo 'echo "=============================================="' >> "$TEMP_SCRIPT"
+echo 'echo ""' >> "$TEMP_SCRIPT"
+echo 'echo "Press any keyboard shortcuts to detect which app handles them."' >> "$TEMP_SCRIPT"
+echo 'echo "Press Ctrl+C to quit."' >> "$TEMP_SCRIPT"
+echo 'echo ""' >> "$TEMP_SCRIPT"
+echo 'echo "=============================================="' >> "$TEMP_SCRIPT"
+echo 'echo ""' >> "$TEMP_SCRIPT"
+echo "\"$DETECTOR\"" >> "$TEMP_SCRIPT"
+echo 'echo ""' >> "$TEMP_SCRIPT"
+echo 'echo "Shortcut Detective has stopped."' >> "$TEMP_SCRIPT"
+echo 'echo "Press any key to close this window..."' >> "$TEMP_SCRIPT"
+echo 'read -n 1' >> "$TEMP_SCRIPT"
+
 chmod +x "$TEMP_SCRIPT"
 
-cat > "$TEMP_SCRIPT" << EOF
-#!/bin/bash
-clear
-echo "=============================================="
-echo "🔍 Shortcut Detective"
-echo "=============================================="
-echo ""
-echo "Press any keyboard shortcuts to detect which app handles them."
-echo "Press Ctrl+C to quit."
-echo ""
-echo "=============================================="
-echo ""
-
-# Run the detector
-"$DETECTOR"
-
-# Keep terminal open if it crashes
-echo ""
-echo "Shortcut Detective has stopped."
-echo "Press any key to close this window..."
-read -n 1
-EOF
-
 # Open Terminal with our script
-osascript << EOF
-tell application "Terminal"
-    activate
-    do script "exec bash '$TEMP_SCRIPT'; rm -f '$TEMP_SCRIPT'"
-end tell
-EOF
+osascript -e "tell application \"Terminal\" to activate" \
+          -e "tell application \"Terminal\" to do script \"exec bash '$TEMP_SCRIPT'; rm -f '$TEMP_SCRIPT'\""
 LAUNCHER_EOF
 
 chmod +x "$MACOS_DIR/shortcut-detective-launcher"
