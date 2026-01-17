@@ -1,0 +1,35 @@
+# Compiled files
+shortcut-detective
+*.o
+*.swiftmodule
+*.swiftdoc
+
+# macOS
+.DS_Store
+*.app
+*.xcodeproj
+*.xcworkspace
+
+# Build artifacts
+build/
+DerivedData/
+
+# Logs
+*.log
+/tmp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Test files
+test_icons/
+
+# Icon intermediate files (keep .icns and .png)
+icons/AppIcon.iconset/
+
+# Editor/IDE session files
+.session/
